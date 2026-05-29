@@ -3,6 +3,7 @@
 const LegalApp = {
     // Variable para memorizar la ventana que se encuentra activa
     currentCategory: null,
+    isFormMode: false, // Para saber si estamos en modo formulario
 
     // Contenido de las guías para cada categoría (incluyendo Instagram)
     guides: {
@@ -276,6 +277,7 @@ const LegalApp = {
     openModal: function(category) {
         // Guardamos la categoría actual para usarla en el mensaje de WhatsApp
         this.currentCategory = category;
+        this.isFormMode = false;
 
         const guide = this.guides[category];
         if (!guide) return;
@@ -295,7 +297,23 @@ const LegalApp = {
         if (category === 'instagram') {
             modalFooter.style.display = 'none';
         } else {
-            modalFooter.style.display = 'block'; // Lo mostramos para el resto de categorías
+            // Restauramos los botones originales para la ventana de guía
+            modalFooter.style.display = 'flex';
+            modalFooter.innerHTML = `
+                <button class="btn btn-contact">
+                    <i class="fas fa-whatsapp"></i>
+                    <span>Contactar al Estudio</span>
+                </button>
+            `;
+            
+            // Reasignar el evento del botón de contacto
+            const contactBtn = modalFooter.querySelector('.btn-contact');
+            if (contactBtn) {
+                contactBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleContact();
+                });
+            }
         }
 
         modal.classList.add('active');
@@ -315,13 +333,13 @@ const LegalApp = {
         
         // Limpiamos la categoría al cerrar la ventana
         this.currentCategory = null;
+        this.isFormMode = false;
     },
 
     setupModal: function() {
         const self = this;
         const modalClose = document.getElementById('modalClose');
         const modalOverlay = document.getElementById('modalOverlay');
-        const contactBtn = document.querySelector('.btn-contact');
 
         if (modalClose) {
             modalClose.addEventListener('click', function(e) {
@@ -335,13 +353,6 @@ const LegalApp = {
                 if (e.target === modalOverlay) {
                     self.closeModal();
                 }
-            });
-        }
-
-        if (contactBtn) {
-            contactBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                self.handleContact();
             });
         }
 
@@ -359,20 +370,16 @@ const LegalApp = {
 
     showContactForm: function(numeroWhatsApp) {
         const self = this;
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalFooter = document.querySelector('.modal-footer');
         
-        // Crear el overlay y el modal
-        const overlay = document.createElement('div');
-        overlay.className = 'contact-modal-overlay';
-        overlay.id = 'contactModalOverlay';
+        // Cambiar el título del modal
+        modalTitle.textContent = 'Formulario de Contacto';
         
-        const modal = document.createElement('div');
-        modal.className = 'contact-modal';
-        modal.innerHTML = `
-            <div class="contact-modal-header">
-                <h2>Formulario de Contacto</h2>
-                <button class="contact-modal-close" onclick="document.getElementById('contactModalOverlay').remove()">&times;</button>
-            </div>
-            <form id="contactForm" class="contact-form">
+        // Crear el formulario HTML
+        const formHTML = `
+            <form id="contactForm" class="contact-form-inline">
                 <div class="form-group">
                     <label for="clientName">Nombre <span class="required">*</span></label>
                     <input 
@@ -399,16 +406,26 @@ const LegalApp = {
                         <span id="charCount">0</span>/300 palabras
                     </div>
                 </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn-cancel" onclick="document.getElementById('contactModalOverlay').remove()">Cancelar</button>
-                    <button type="submit" class="btn-submit">Enviar Mensaje - WhatsApp</button>
-                </div>
             </form>
         `;
         
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
+        // Reemplazar el contenido del modal
+        modalContent.innerHTML = formHTML;
+        
+        // Cambiar los botones del footer
+        modalFooter.innerHTML = `
+            <button type="button" class="btn btn-cancel" id="backToGuide">
+                <i class="fas fa-arrow-left"></i>
+                <span>Volver</span>
+            </button>
+            <button type="button" class="btn btn-submit" id="submitForm">
+                <i class="fas fa-whatsapp"></i>
+                <span>Enviar Mensaje</span>
+            </button>
+        `;
+        
+        // Marcar que estamos en modo formulario
+        this.isFormMode = true;
         
         // Manejador para el contador de caracteres
         const textarea = document.getElementById('problemDescription');
@@ -417,9 +434,17 @@ const LegalApp = {
             charCount.textContent = this.value.length;
         });
         
+        // Manejador para volver a la guía
+        const backBtn = document.getElementById('backToGuide');
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const category = self.currentCategory;
+            self.openModal(category);
+        });
+        
         // Manejador del envío del formulario
-        const form = document.getElementById('contactForm');
-        form.addEventListener('submit', (e) => {
+        const submitBtn = document.getElementById('submitForm');
+        submitBtn.addEventListener('click', (e) => {
             e.preventDefault();
             
             const clientName = document.getElementById('clientName').value.trim();
@@ -438,17 +463,10 @@ const LegalApp = {
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeFinal)}`;
             
             // Cerrar el modal
-            document.getElementById('contactModalOverlay').remove();
+            self.closeModal();
             
             // Redirigir a WhatsApp
             window.open(url, '_blank');
-        });
-        
-        // Cerrar modal al hacer clic en el overlay
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                overlay.remove();
-            }
         });
     },
 
