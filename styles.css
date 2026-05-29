@@ -453,30 +453,34 @@ div.fg{
     border-top: 1px solid rgba(212, 175, 55, 0.1);
     text-align: center;
     background: rgba(0, 0, 0, 0.2); /* Sutil oscurecimiento en el pie */
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Estilos de Botones */
+.btn {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
 }
 
 /* Botón Contactar estilo WhatsApp Moderno */
 .btn-contact {
-    padding: 14px 30px;
-    font-size: 15px;
-    font-weight: 600;
     border: 1px solid rgba(37, 211, 102, 0.3);
-    border-radius: 12px;
-    cursor: pointer;
     background: linear-gradient(135deg, rgba(37, 211, 102, 0.1) 0%, rgba(37, 211, 102, 0.02) 100%);
     color: #25d366;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    min-height: 48px;
     width: 100%;
     backdrop-filter: blur(5px);
-}
-
-.btn-contact i {
-    font-size: 20px;
 }
 
 .btn-contact:hover {
@@ -489,6 +493,99 @@ div.fg{
 
 .btn-contact:active {
     transform: translateY(0);
+}
+
+/* Botón Cancelar */
+.btn-cancel {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #b5b5b5;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    min-width: 100px;
+}
+
+.btn-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #d4af37;
+    border-color: rgba(212, 175, 55, 0.4);
+}
+
+/* Botón Enviar */
+.btn-submit {
+    background: linear-gradient(135deg, #25d366 0%, #20ba58 100%);
+    color: white;
+    border: none;
+    flex: 1;
+    min-width: 150px;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Formulario Integrado */
+.contact-form-inline {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #d4af37;
+    font-size: 14px;
+}
+
+.required {
+    color: #ff6b6b;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.2s;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #888;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #25d366;
+    background-color: rgba(37, 211, 102, 0.1);
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.15);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: 'Inter', sans-serif;
+}
+
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
 }
 
 /* Social Icons */
@@ -577,163 +674,6 @@ div.fg{
 @keyframes scaleIn {
     from { transform: scale(0.5); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
-}
-
-/* ==========================================================================
-   MODAL DE CONTACTO - ESTILOS NUEVOS
-   ========================================================================== */
-
-.contact-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.contact-modal {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    animation: slideUp 0.3s ease-out;
-}
-
-.contact-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 25px;
-    border-bottom: 2px solid #f0f0f0;
-}
-
-.contact-modal-header h2 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-    font-family: 'Libre Baskerville', serif;
-}
-
-.contact-modal-close {
-    background: none;
-    border: none;
-    font-size: 32px;
-    color: #666;
-    cursor: pointer;
-    padding: 0;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s;
-}
-
-.contact-modal-close:hover {
-    color: #333;
-}
-
-.contact-form {
-    padding: 25px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-    font-size: 14px;
-}
-
-.required {
-    color: #e74c3c;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 14px;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #3498db;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-    font-family: 'Inter', sans-serif;
-}
-
-.char-count {
-    text-align: right;
-    font-size: 12px;
-    color: #999;
-    margin-top: 5px;
-}
-
-.form-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 30px;
-    justify-content: flex-end;
-}
-
-.btn-cancel,
-.btn-submit {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-cancel {
-    background-color: #ecf0f1;
-    color: #333;
-}
-
-.btn-cancel:hover {
-    background-color: #d5dbdb;
-}
-
-.btn-submit {
-    background-color: #25d366;
-    color: white;
-}
-
-.btn-submit:hover {
-    background-color: #20ba58;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
-}
-
-.btn-submit:active {
-    transform: translateY(0);
 }
 
 /* ==========================================================================
@@ -1022,8 +962,12 @@ div.fg{
     .insta-footer-title { font-size: 16px; }
     .insta-footer-desc { font-size: 12px; }
     
-    .contact-modal {
-        width: 90%;
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .btn-submit, .btn-cancel {
+        width: 100%;
     }
 }
 
@@ -1073,24 +1017,12 @@ div.fg{
     .insta-footer-desc { font-size: 11px; line-height: 1.3; }
     .insta-footer-arrow { font-size: 16px; margin-left: 10px; }
     
-    .contact-modal {
-        width: 95%;
-    }
-    
-    .contact-modal-header {
-        padding: 20px;
-    }
-    
-    .contact-form {
-        padding: 20px;
-    }
-    
-    .form-actions {
+    .modal-footer {
         flex-direction: column-reverse;
+        gap: 10px;
     }
     
-    .btn-cancel,
-    .btn-submit {
+    .btn-submit, .btn-cancel {
         width: 100%;
     }
 }
