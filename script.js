@@ -275,7 +275,6 @@ const LegalApp = {
     },
 
     openModal: function(category) {
-        // Guardamos la categoría actual para usarla en el mensaje de WhatsApp
         this.currentCategory = category;
         this.isFormMode = false;
 
@@ -286,18 +285,14 @@ const LegalApp = {
         const modalOverlay = document.getElementById('modalOverlay');
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
-        
-        // Seleccionamos el contenedor del botón de contacto
         const modalFooter = document.querySelector('.modal-footer'); 
 
         modalTitle.textContent = guide.title;
         modalContent.innerHTML = guide.content;
 
-        // Ocultamos el botón de contacto SÓLO si es la ventana de Instagram
         if (category === 'instagram') {
             modalFooter.style.display = 'none';
         } else {
-            // Restauramos los botones originales para la ventana de guía
             modalFooter.style.display = 'flex';
             modalFooter.innerHTML = `
                 <button class="btn btn-contact">
@@ -306,7 +301,6 @@ const LegalApp = {
                 </button>
             `;
             
-            // Reasignar el evento del botón de contacto
             const contactBtn = modalFooter.querySelector('.btn-contact');
             if (contactBtn) {
                 contactBtn.addEventListener('click', (e) => {
@@ -318,7 +312,6 @@ const LegalApp = {
 
         modal.classList.add('active');
         modalOverlay.classList.add('active');
-
         document.body.style.overflow = 'hidden';
     },
 
@@ -328,10 +321,8 @@ const LegalApp = {
 
         modal.classList.remove('active');
         modalOverlay.classList.remove('active');
-
         document.body.style.overflow = '';
         
-        // Limpiamos la categoría al cerrar la ventana
         this.currentCategory = null;
         this.isFormMode = false;
     },
@@ -364,89 +355,99 @@ const LegalApp = {
     },
 
     handleContact: function() {
-        const numeroWhatsApp = "5493510000000"; 
-        this.showContactForm(numeroWhatsApp);
+        const numeroWhatsApp = "5493512007218";
+        
+        if (window.innerWidth > 1024) {
+            this.showDesktopContact(numeroWhatsApp);
+        } else {
+            this.showMobileContactForm(numeroWhatsApp);
+        }
     },
 
-    showContactForm: function(numeroWhatsApp) {
+    showMobileContactForm: function(numeroWhatsApp) {
         const self = this;
         const modalTitle = document.getElementById('modalTitle');
         const modalContent = document.getElementById('modalContent');
         const modalFooter = document.querySelector('.modal-footer');
         
-        // Cambiar el título del modal
         modalTitle.textContent = 'Formulario de Contacto';
         
-        // Crear el formulario HTML
         const formHTML = `
-            <form id="contactForm" class="contact-form-inline">
-                <div class="form-group">
-                    <label for="clientName">Nombre <span class="required">*</span></label>
-                    <input 
-                        type="text" 
-                        id="clientName" 
-                        name="clientName" 
-                        placeholder="Tu nombre y apellido" 
-                        maxlength="100"
-                        required
-                    >
-                </div>
-                
-                <div class="form-group">
-                    <label for="problemDescription">Descripción de mi caso <span class="required">*</span></label>
-                    <textarea 
-                        id="problemDescription" 
-                        name="problemDescription" 
-                        placeholder="Describe tu problema en máximo 300 palabras" 
-                        maxlength="300"
-                        rows="6"
-                        required
-                    ></textarea>
-                    <div class="char-count">
-                        <span id="charCount">0</span>/300 palabras
+            <div class="contact-form-inline">
+                <p class="form-warning-message">
+                    <i class="fas fa-exclamation-circle"></i> El siguiente formulario se enviará mediante un mensaje de WhatsApp.
+                </p>
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="clientName">Nombre <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="clientName" 
+                            name="clientName" 
+                            placeholder="Tu nombre y apellido" 
+                            maxlength="100"
+                            required
+                        >
                     </div>
-                </div>
-            </form>
+                    
+                    <div class="form-group">
+                        <label for="problemDescription">Descripción de mi caso <span class="required">*</span></label>
+                        <textarea 
+                            id="problemDescription" 
+                            name="problemDescription" 
+                            placeholder="Describe tu caso en máximo 350 caracteres..." 
+                            maxlength="350"
+                            rows="6"
+                            required
+                        ></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/350 caracteres
+                        </div>
+                    </div>
+                </form>
+            </div>
         `;
         
-        // Reemplazar el contenido del modal
         modalContent.innerHTML = formHTML;
         
-        // Cambiar los botones del footer
         modalFooter.innerHTML = `
             <button type="button" class="btn btn-cancel" id="backToGuide">
                 <i class="fas fa-arrow-left"></i>
                 <span>Volver</span>
             </button>
+            <button type="button" class="btn btn-direct-chat" id="directChatBtn">
+                <i class="fab fa-whatsapp"></i>
+                <span>Ir directo al chat</span>
+            </button>
             <button type="button" class="btn btn-submit" id="submitForm">
-                <i class="fas fa-whatsapp"></i>
-                <span>Enviar Mensaje</span>
+                <i class="fab fa-whatsapp"></i>
+                <span>Enviar Mensaje WhatsApp</span>
             </button>
         `;
         
-        // Marcar que estamos en modo formulario
         this.isFormMode = true;
         
-        // Manejador para el contador de caracteres
         const textarea = document.getElementById('problemDescription');
         const charCount = document.getElementById('charCount');
         textarea.addEventListener('input', function() {
             charCount.textContent = this.value.length;
         });
         
-        // Manejador para volver a la guía
-        const backBtn = document.getElementById('backToGuide');
-        backBtn.addEventListener('click', (e) => {
+        document.getElementById('backToGuide').addEventListener('click', (e) => {
             e.preventDefault();
-            const category = self.currentCategory;
-            self.openModal(category);
+            self.openModal(self.currentCategory);
         });
         
-        // Manejador del envío del formulario
-        const submitBtn = document.getElementById('submitForm');
-        submitBtn.addEventListener('click', (e) => {
+        document.getElementById('directChatBtn').addEventListener('click', (e) => {
             e.preventDefault();
-            
+            const mensajeBase = self.getMensajeBase();
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeBase)}`;
+            self.closeModal();
+            window.open(url, '_blank');
+        });
+        
+        document.getElementById('submitForm').addEventListener('click', (e) => {
+            e.preventDefault();
             const clientName = document.getElementById('clientName').value.trim();
             const problemDescription = document.getElementById('problemDescription').value.trim();
             
@@ -455,18 +456,92 @@ const LegalApp = {
                 return;
             }
             
-            // Construir el mensaje personalizado con la información del formulario
             let mensajeBase = self.getMensajeBase();
             const mensajeFinal = `Hola. Mi nombre es ${clientName}. ${mensajeBase} Mi problema es el siguiente: ${problemDescription}`;
-            
-            // Generar el URL de WhatsApp
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeFinal)}`;
             
-            // Cerrar el modal
             self.closeModal();
-            
-            // Redirigir a WhatsApp
             window.open(url, '_blank');
+        });
+    },
+
+    // NUEVO DISEÑO DE BOTONES ADAPTADO AL FORMATO SOLICITADO
+    showDesktopContact: function(numeroWhatsApp) {
+        const self = this;
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        const modalFooter = document.querySelector('.modal-footer');
+        
+        modalTitle.textContent = 'Datos de contacto:';
+        
+        const desktopHTML = `
+            <div class="desktop-contact-layout">
+                <div class="desktop-contact-left">
+                    <div class="qr-wrapper">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://wa.me/${numeroWhatsApp}" alt="QR WhatsApp" class="qr-mock-img">
+                    </div>
+                    <p class="qr-instructions">Escanea el código QR y envía un mensaje de WhatsApp.</p>
+                </div>
+                
+                <div class="desktop-vertical-divider"></div>
+                
+                <div class="desktop-contact-right">
+                    <div class="info-block">
+                        <div class="info-row">
+                            <span class="info-label">WhatsApp:</span>
+                            <span class="info-value">+5493512007218</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Instagram:</span>
+                            <span class="info-value">matiasferreyralopez</span>
+                        </div>
+                    </div>
+                    
+                    <div class="desktop-action-buttons">
+                        <a href="https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(self.getMensajeBase())}" target="_blank" class="hero-btn-single desktop-modal-btn">
+                            <div class="btn-single-icon">
+                                <i class="fab fa-whatsapp"></i>
+                            </div>
+                            <div class="btn-single-content">
+                                <span class="btn-single-title">Chat de WhatsApp</span>
+                                <span class="btn-single-desc">Contacto directo e inmediato.</span>
+                            </div>
+                            <div class="btn-single-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </a>
+                        
+                        <a href="https://www.instagram.com/matiasferreyralopez/" target="_blank" class="instagram-footer-btn desktop-modal-btn">
+                            <div class="insta-footer-icon">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="insta-footer-content">
+                                <span class="insta-footer-title">Instagram</span>
+                                <span class="insta-footer-desc">Novedades y nuestra actividad diaria.</span>
+                            </div>
+                            <div class="insta-footer-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        modalContent.innerHTML = desktopHTML;
+        
+        modalFooter.innerHTML = `
+            <button type="button" class="btn btn-cancel" id="backToGuide">
+                <i class="fas fa-arrow-left"></i>
+                <span>Volver</span>
+            </button>
+        `;
+        
+        this.isFormMode = true;
+        
+        document.getElementById('backToGuide').addEventListener('click', (e) => {
+            e.preventDefault();
+            self.openModal(self.currentCategory);
         });
     },
 

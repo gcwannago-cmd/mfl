@@ -21,7 +21,70 @@ body {
     padding-top: max(0px, env(safe-area-inset-top));
     padding-bottom: max(0px, env(safe-area-inset-bottom));
 }
+/* ==========================================================================
+   OPTIMIZACIÓN DE BOTONES ESTRUCTURADOS DENTRO DEL MODAL (ESCRITORIO)
+   ========================================================================== */
 
+@media (min-width: 1025px) {
+    /* Ampliamos levemente el modal para dar más aire al diseño de dos columnas */
+    .modal {
+        width: 630px;
+    }
+    
+    .desktop-contact-layout {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 25px;
+        padding: 5px 0;
+    }
+
+    /* Normalización de los botones reutilizados dentro del bloque del modal */
+    .desktop-action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .desktop-action-buttons .desktop-modal-btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 10px 14px !important;
+        border-radius: 12px !important;
+    }
+
+    /* Ajustes compactos de texto para que quepan fluidamente sin romper líneas erráticas */
+    .desktop-action-buttons .btn-single-title,
+    .desktop-action-buttons .insta-footer-title {
+        font-size: 14px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .desktop-action-buttons .btn-single-desc,
+    .desktop-action-buttons .insta-footer-desc {
+        font-size: 10.5px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Ajustes métricos de los íconos de los botones del modal */
+    .desktop-action-buttons .btn-single-icon,
+    .desktop-action-buttons .insta-footer-icon {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 18px !important;
+        margin-right: 12px !important;
+        border-radius: 9px !important;
+    }
+
+    .desktop-action-buttons .btn-single-arrow,
+    .desktop-action-buttons .insta-footer-arrow {
+        font-size: 14px !important;
+        margin-left: 8px !important;
+    }
+}
 /* ==========================================================================
    CONTROL DE SCROLL SEGÚN EL DISPOSITIVO
    ========================================================================== */
@@ -1038,4 +1101,167 @@ div.fg{
 
 @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
+}
+/* ==========================================================================
+   NUEVAS INTERFACES DE CONTACTO (MODAL POPUP)
+   ========================================================================== */
+
+/* --- Estilos Modificación 1: Móviles --- */
+.form-warning-message {
+    background-color: rgba(212, 175, 55, 0.08);
+    border-left: 3px solid #d4af37;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #e5c158;
+    margin-bottom: 18px;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-direct-chat {
+    background: transparent;
+    color: #25d366;
+    border: 1px solid rgba(37, 211, 102, 0.4);
+    flex: 1;
+}
+
+.btn-direct-chat:hover {
+    background: rgba(37, 211, 102, 0.1);
+    border-color: #25d366;
+    transform: translateY(-2px);
+}
+
+/* --- Estilos Modificación 2: Computadora (Escritorio) --- */
+.desktop-contact-layout {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 25px;
+    padding: 10px 0;
+}
+
+.desktop-contact-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.qr-wrapper {
+    background: #ffffff;
+    padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    margin-bottom: 12px;
+}
+
+.qr-mock-img {
+    width: 140px;
+    height: 140px;
+    display: block;
+}
+
+.qr-instructions {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #b5b5b5;
+    max-width: 180px;
+}
+
+/* Divisor Vertical */
+.desktop-vertical-divider {
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.25) 20%, rgba(212, 175, 55, 0.25) 80%, transparent);
+}
+
+.desktop-contact-right {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.info-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.info-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #d4af37;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.desktop-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-desktop-redirect {
+    width: 100%;
+}
+
+.btn-desktop-wa {
+    background: linear-gradient(135deg, rgba(37, 211, 102, 0.15) 0%, rgba(37, 211, 102, 0.05) 100%);
+    border: 1px solid rgba(37, 211, 102, 0.4);
+    color: #25d366;
+}
+
+.btn-desktop-wa:hover {
+    background: linear-gradient(135deg, #25d366 0%, #20ba58 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 15px rgba(37, 211, 102, 0.25);
+    transform: translateY(-2px);
+}
+
+.btn-desktop-ig {
+    background: linear-gradient(135deg, rgba(225, 48, 108, 0.15) 0%, rgba(225, 48, 108, 0.05) 100%);
+    border: 1px solid rgba(225, 48, 108, 0.4);
+    color: #e1306c;
+}
+
+.btn-desktop-ig:hover {
+    background: linear-gradient(135deg, #e1306c 0%, #c13584 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 15px rgba(225, 48, 108, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Adaptación del footer responsivo de 3 botones y fallback para pantallas chicas */
+@media (max-width: 768px) {
+    .btn-direct-chat {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-footer {
+        flex-direction: column-reverse; /* Enviar arriba, directo al medio, volver abajo */
+        gap: 10px;
+    }
 }
