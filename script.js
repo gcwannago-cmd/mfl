@@ -210,7 +210,7 @@ const LegalApp = {
             title: 'Nuestro Feed de Instagram',
             content: `
                 <div style="width: 100%; height: 400px; overflow-y: auto; border-radius: 8px; background: #f9f9f9; text-align: center;">
-                    <iframe src="https://www.instagram.com/p/DY0s4bIG0qc/embed" class="snapwidget-widget" allowtransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%; height:100%;"></iframe>
+                    <iframe src="https://www.instagram.com/p/DY0s4bIG0qc/embed" class="snapwidget-widget" allowtransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:100%;"></iframe>
                 </div>
                 
                 <div style="text-align: center; margin-top: 15px;">
@@ -353,39 +353,124 @@ const LegalApp = {
     },
 
     handleContact: function() {
-        // Reemplaza por tu número real manteniendo el código de país y de área sin símbolos
         const numeroWhatsApp = "5493510000000"; 
+        this.showContactForm(numeroWhatsApp);
+    },
+
+    showContactForm: function(numeroWhatsApp) {
+        const self = this;
         
-        // Mensaje base de respaldo
-        let mensaje = "Hola, me comunico desde la página web del estudio. Me gustaría hacer una consulta.";
+        // Crear el overlay y el modal
+        const overlay = document.createElement('div');
+        overlay.className = 'contact-modal-overlay';
+        overlay.id = 'contactModalOverlay';
         
-        // Personalización inteligente del mensaje según la ventana activa
-        switch (this.currentCategory) {
+        const modal = document.createElement('div');
+        modal.className = 'contact-modal';
+        modal.innerHTML = `
+            <div class="contact-modal-header">
+                <h2>Formulario de Contacto</h2>
+                <button class="contact-modal-close" onclick="document.getElementById('contactModalOverlay').remove()">&times;</button>
+            </div>
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <label for="clientName">Nombre <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="clientName" 
+                        name="clientName" 
+                        placeholder="Tu nombre y apellido" 
+                        maxlength="100"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="problemDescription">Descripción de mi caso <span class="required">*</span></label>
+                    <textarea 
+                        id="problemDescription" 
+                        name="problemDescription" 
+                        placeholder="Describe tu problema en máximo 300 palabras" 
+                        maxlength="300"
+                        rows="6"
+                        required
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span>/300 palabras
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="document.getElementById('contactModalOverlay').remove()">Cancelar</button>
+                    <button type="submit" class="btn-submit">Enviar Mensaje - WhatsApp</button>
+                </div>
+            </form>
+        `;
+        
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+        
+        // Manejador para el contador de caracteres
+        const textarea = document.getElementById('problemDescription');
+        const charCount = document.getElementById('charCount');
+        textarea.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+        
+        // Manejador del envío del formulario
+        const form = document.getElementById('contactForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const clientName = document.getElementById('clientName').value.trim();
+            const problemDescription = document.getElementById('problemDescription').value.trim();
+            
+            if (!clientName || !problemDescription) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
+            // Construir el mensaje personalizado con la información del formulario
+            let mensajeBase = self.getMensajeBase();
+            const mensajeFinal = `Hola. Mi nombre es ${clientName}. ${mensajeBase} Mi problema es el siguiente: ${problemDescription}`;
+            
+            // Generar el URL de WhatsApp
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeFinal)}`;
+            
+            // Cerrar el modal
+            document.getElementById('contactModalOverlay').remove();
+            
+            // Redirigir a WhatsApp
+            window.open(url, '_blank');
+        });
+        
+        // Cerrar modal al hacer clic en el overlay
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                overlay.remove();
+            }
+        });
+    },
+
+    getMensajeBase: function() {
+        switch(this.currentCategory) {
             case 'accidente-transito':
-                mensaje = "Hola. Me comunico desde su web. Sufrí un accidente de tránsito y necesito asesoramiento legal para reclamar.";
-                break;
+                return "Sufrí un accidente de tránsito y necesito asesoramiento legal para reclamar.";
             case 'accidente-laboral':
-                mensaje = "Hola. Me comunico desde su web. Sufrí un accidente de trabajo (o tengo un problema con la ART) y necesito asesorarme sobre mis derechos.";
-                break;
+                return "Sufrí un accidente de trabajo (o tengo un problema con la ART) y necesito asesorarme sobre mis derechos.";
             case 'despido-laboral':
-                mensaje = "Hola. Fui despedido/a recientemente y me gustaría que revisen mi caso y liquidación.";
-                break;
+                return "Fui despedido/a recientemente y me gustaría que revisen mi caso y liquidación.";
             case 'cuota-alimentaria':
-                mensaje = "Hola. Necesito hacerles una consulta relacionada con un tema de cuota alimentaria.";
-                break;
+                return "Necesito hacerles una consulta relacionada con un tema de cuota alimentaria.";
             case 'cumplimiento-contrato':
-                mensaje = "Hola. Me comunico por un problema de incumplimiento de contrato y necesito saber mis opciones legales.";
-                break;
+                return "Me comunico por un problema de incumplimiento de contrato y necesito saber mis opciones legales.";
             case 'sucesiones':
-                mensaje = "Hola. Me comunico desde su web para hacer una consulta sobre un trámite de sucesión/herencia.";
-                break;
+                return "Me comunico para hacer una consulta sobre un trámite de sucesión/herencia.";
             case 'instagram':
-                mensaje = "Hola, vi su perfil de Instagram desde la web y me gustaría hacerles una consulta legal.";
-                break;
+                return "Vi su perfil de Instagram desde la web y me gustaría hacerles una consulta legal.";
+            default:
+                return "Me comunico desde la página web del estudio. Me gustaría hacer una consulta.";
         }
-        
-        const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-        window.open(url, '_blank');
     },
 
     preventPinchZoom: function() {
