@@ -1,0 +1,32 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Escala/Balanza -->
+  <defs>
+    <style>
+      .scale-line { stroke: #e8e8e8; stroke-width: 1.5; fill: none; }
+      .scale-text { font-family: Arial, sans-serif; font-size: 24px; font-weight: 300; letter-spacing: 3px; fill: #e8e8e8; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Triángulo superior (soporte de la balanza) -->
+  <line x1="100" y1="20" x2="75" y2="50" class="scale-line"/>
+  <line x1="100" y1="20" x2="125" y2="50" class="scale-line"/>
+  <line x1="75" y1="50" x2="125" y2="50" class="scale-line"/>
+
+  <!-- Punto de apoyo -->
+  <circle cx="100" cy="50" r="3" fill="#e8e8e8"/>
+
+  <!-- Barra horizontal -->
+  <line x1="60" y1="50" x2="140" y2="50" class="scale-line" stroke-width="2"/>
+
+  <!-- Platos de la balanza -->
+  <!-- Plato izquierdo -->
+  <rect x="50" y="55" width="20" height="8" rx="2" fill="#e8e8e8"/>
+  <line x1="60" y1="55" x2="60" y2="45" class="scale-line"/>
+
+  <!-- Plato derecho -->
+  <rect x="130" y="55" width="20" height="8" rx="2" fill="#e8e8e8"/>
+  <line x1="140" y1="55" x2="140" y2="45" class="scale-line"/>
+
+  <!-- Texto MORIL -->
+  <text x="100" y="120" class="scale-text">MORIL</text>
+</svg>
